@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "464895699124",
+    "firebase_url": "https://resturant-f122c.firebaseio.com",
+    "project_id": "resturant-f122c",
+    "storage_bucket": "resturant-f122c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:464895699124:android:d7081bf05093c37b",
+        "android_client_info": {
+          "package_name": "com.example.admin.resturant"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "464895699124-c2mfhvb7ti8ldn5cf267ls4ouicto3bh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.admin.resturant",
+            "certificate_hash": "28246dda04475b352989d479ba53b603610cac85"
+          }
+        },
+        {
+          "client_id": "464895699124-ediahp6r0k4vkbdr5md6hah759u0t3hj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGvGegGoJi1qCR6PVTqwyapEMx4HAkI2A"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "464895699124-ediahp6r0k4vkbdr5md6hah759u0t3hj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
