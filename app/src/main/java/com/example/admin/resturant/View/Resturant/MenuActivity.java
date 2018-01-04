@@ -25,14 +25,19 @@ public class MenuActivity extends AppCompatActivity implements MyItemRecyclerVie
 
     private int mColumnCount = 1;
     private String TAG = "MenuActivityTag";
+    private FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_resturant);
 
+        user = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("menu");
+
+
+
 
 
         RecyclerView recyclerView = findViewById(R.id.rvItems);
@@ -46,7 +51,7 @@ public class MenuActivity extends AppCompatActivity implements MyItemRecyclerVie
 
     @Override
     public void onListInteraction(Item mItem) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
         if (user != null) {
             // User is signed in
             FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -79,5 +84,9 @@ public class MenuActivity extends AppCompatActivity implements MyItemRecyclerVie
     public void goToCart(MenuItem item) {
         Intent intent = new Intent(MenuActivity.this, CartActivity.class);
         startActivity(intent);
+    }
+
+    public void pay(MenuItem item){
+
     }
 }

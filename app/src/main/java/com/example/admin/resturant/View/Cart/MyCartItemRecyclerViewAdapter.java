@@ -89,6 +89,13 @@ public class MyCartItemRecyclerViewAdapter extends RecyclerView.Adapter<MyCartIt
 
     @Override
     public int getItemCount() {
+        double total = 0;
+        for (int i = 0; i < items.size(); i++) {
+            total += Double.parseDouble(items.get(i).getPrice());
+        }
+
+        mListener.updateTotal(total);
+
         return items.size();
     }
 
@@ -115,6 +122,8 @@ public class MyCartItemRecyclerViewAdapter extends RecyclerView.Adapter<MyCartIt
         void onListInteraction(Item mItem);
 
         void onListUpdate();
+
+        void updateTotal(double total);
     }
 
 }

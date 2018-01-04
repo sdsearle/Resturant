@@ -5,4 +5,10 @@
         android:id="@+id/cart"
         android:title="Cart"
         android:onClick="goToCart" />
+
+    <item
+        android:id="@+id/pay"
+        android:title="Pay"
+        android:onClick="pay" />
+
 </menu>

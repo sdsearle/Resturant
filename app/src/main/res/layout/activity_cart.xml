@@ -4,7 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.admin.resturant.View.Resturant.MenuActivity">
+    tools:context="com.example.admin.resturant.View.Cart.CartActivity"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvTotal"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Buy"
+        android:onClick="buyCart"
+        android:id="@+id/btnBuy"/>
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
