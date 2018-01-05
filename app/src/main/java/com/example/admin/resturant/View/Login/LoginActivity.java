@@ -1,5 +1,6 @@
 package com.example.admin.resturant.View.Login;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 
 import com.example.admin.resturant.Item;
 import com.example.admin.resturant.R;
+import com.example.admin.resturant.View.Resturant.MenuActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -27,9 +29,14 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-public class LoginActivity extends AppCompatActivity {
+
+import javax.inject.Inject;
+
+public class LoginActivity extends AppCompatActivity implements LoginContract.View {
+
+    @Inject
+    LoginPresenter presenter;
 
     EditText etEmail;
     EditText etPassword;
@@ -46,6 +53,11 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        setupDaggerComponent();
+
+        presenter.attachView(this);
+
         mAuth = FirebaseAuth.getInstance();
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
@@ -137,6 +149,10 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    private void setupDaggerComponent() {
+//        DaggerLoginComponent.create().inject(this);
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -161,79 +177,17 @@ public class LoginActivity extends AppCompatActivity {
         switch (view.getId()) {
 
             case R.id.btnLogin:
-
-                PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                        "4802681516",        // Phone number to verify
-                        60,                 // Timeout duration
-                        TimeUnit.SECONDS,   // Unit of timeout
-                        LoginActivity.this,               // Activity (for callback binding)
-                        mCallbacks);        // OnVerificationStateChangedCallbacks
-
-                /*mAuth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                Log.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
-
-                                // If sign in fails, display a message to the user. If sign in succeeds
-                                // the auth state listener will be notified and logic to handle the
-                                // signed in user can be handled in the listener.
-                                if (!task.isSuccessful()) {
-                                    Log.w(TAG, "signInWithEmail:failed", task.getException());
-                                    Toast.makeText(LoginActivity.this, "Sign in failed",
-                                            Toast.LENGTH_SHORT).show();
-                                    tvUser.setText("failed to sign in");
-                                } else {
-                                    Toast.makeText(LoginActivity.this, "SignIn Successful", Toast.LENGTH_SHORT).show();
-
-                                    //user = FirebaseAuth.getInstance().getCurrentUser();
-                                    if(mAuth.getCurrentUser().getPhoneNumber() == null){
-
-
-
-                                    }//else {
-                                        Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
-                                        startActivity(intent);
-                                    //}
-                                    //tvUser.setText("signed in");
-                                }
-                                // ...
-                            }
-                        });*/
-
+                presenter.validateUser(email, password);
 
                 break;
 
             case R.id.btnSignup:
-                mAuth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
-
-                                // If sign in fails, display a message to the user. If sign in succeeds
-                                // the auth state listener will be notified and logic to handle the
-                                // signed in user can be handled in the listener.
-                                if (!task.isSuccessful()) {
-                                    //FirebaseAuthException e = (FirebaseAuthException )task.getException();
-                                    //Log.d(TAG, "onComplete: " + e.getMessage());
-                                    Toast.makeText(LoginActivity.this, "Creation Failed", Toast.LENGTH_SHORT).show();
-                                } else
-                                    Toast.makeText(LoginActivity.this, "User Created", Toast.LENGTH_SHORT).show();
-
-                                // ...
-                            }
-                        }).addOnFailureListener(this, new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "onFailure: " + e.getMessage());
-                    }
-                });
+                presenter.validateUser(email,password);
                 break;
 
             case R.id.btnSignOut:
-                    mAuth.signOut();
-                    tvUser.setText("not Signed In");
+                mAuth.signOut();
+                tvUser.setText("not Signed In");
                 break;
         }
     }
@@ -245,23 +199,23 @@ public class LoginActivity extends AppCompatActivity {
         List<Item> items = new ArrayList<>();
         for (int i = 1; i < 6; i++) {
             Item hamburger = new Item(i + " Patty Burger",
-                    1 + (2*i)/3.0 + "");
+                    1 + (2 * i) / 3.0 + "");
 
             items.add(hamburger);
 
-            Item cheseburger = new Item(i + " by " + (i/2 + 1) + " Burger",
-                    (1 + (2*i)/2.0) + "");
+            Item cheseburger = new Item(i + " by " + (i / 2 + 1) + " Burger",
+                    (1 + (2 * i) / 2.0) + "");
 
             items.add(cheseburger);
 
             Item nuggets = new Item(i * 5 + " piece nuggets",
-                    1 + (2*i)/4.0 + "");
+                    1 + (2 * i) / 4.0 + "");
 
             items.add(nuggets);
 
         }
-        for (Item item:
-             items) {
+        for (Item item :
+                items) {
 
             myRef.push().setValue(item)
                     .addOnFailureListener(this, new OnFailureListener() {
@@ -271,6 +225,40 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     });
         }
+
+    }
+
+    @Override
+    public void showError(String s) {
+
+    }
+
+    @Override
+    public void onUserCreation(boolean isCreated) {
+
+        if(isCreated){
+            Toast.makeText(LoginActivity.this, "User Created", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(LoginActivity.this, "Creation Failed", Toast.LENGTH_SHORT).show();
+
+        }
+    }
+
+    @Override
+    public void onUserValidation(boolean isValid) {
+        if(isValid){
+            Toast.makeText(LoginActivity.this, "SignIn Successful", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
+            startActivity(intent);
+        }else{
+            Toast.makeText(LoginActivity.this, "Sign in failed",
+                    Toast.LENGTH_SHORT).show();
+            tvUser.setText("failed to sign in");
+        }
+    }
+
+    @Override
+    public void isSessionValid(boolean isValid) {
 
     }
 }

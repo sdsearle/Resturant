@@ -37,9 +37,6 @@ public class MenuActivity extends AppCompatActivity implements MyItemRecyclerVie
         DatabaseReference myRef = database.getReference("menu");
 
 
-
-
-
         RecyclerView recyclerView = findViewById(R.id.rvItems);
         if (mColumnCount <= 1) {
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
